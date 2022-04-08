@@ -8,9 +8,10 @@ namespace Skola_Bank_Server
 {
     internal class Consumer : User
     {
-        public Consumer(string firstName, string lastName, string socialSecurityNumber) : base(firstName, lastName, socialSecurityNumber)
+        List<Deposit> deposits;
+        public Consumer(string firstName, string lastName, string socialSecurityNumber, List<Deposit> deposits) : base(firstName, lastName, socialSecurityNumber)
         {
-            
+            this.deposits = deposits;
         }
     }
 }
