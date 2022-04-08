@@ -39,7 +39,7 @@ namespace Skola_Bank_Server
         }
 
 
-        static void CheckIfNameIsTaken()
+        static void CheckIfSocialSecurityNumberIsTaken()
         {
             if ()
         }

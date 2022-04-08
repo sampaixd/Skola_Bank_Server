@@ -15,7 +15,7 @@ namespace Skola_Bank_Server
         static List<User> users = new List<User>();
         static XmlFileManager()
         {
-            path = "accounts.xml";
+            path = "users.xml";
             if (!File.Exists(path))
                 CreateXml();
             xmlUsers = new XmlDocument();
