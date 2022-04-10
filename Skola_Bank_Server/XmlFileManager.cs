@@ -12,9 +12,11 @@ namespace Skola_Bank_Server
     {
         string path;
         XmlDocument xmlDocument;
-        public XmlFileManager(string path, string documentElement)
+        string parentNode;
+        public XmlFileManager(string path, string documentElement, string parentNode)
         {
             this.path = path;
+            this.parentNode = parentNode;
             if (!File.Exists(path))
                 CreateXml();
             xmlDocument = new XmlDocument();
@@ -27,6 +29,15 @@ namespace Skola_Bank_Server
             XmlElement documentElement = xmlDocument.CreateElement("users");
             xmlDocument.AppendChild(documentElement);
             xmlDocument.Save(path);
+        }
+        // creates a new element and returns it, making it possible to do more with the added element in their respective classes
+        public XmlElement CreateNewElement()
+        {
+            XmlElement documentElement = xmlDocument.DocumentElement;
+
+            XmlElement addedElement = xmlDocument.CreateElement(parentNode);
+            documentElement.AppendChild(addedElement);
+            return addedElement;
         }
 
         public string Path { get { return path; } }

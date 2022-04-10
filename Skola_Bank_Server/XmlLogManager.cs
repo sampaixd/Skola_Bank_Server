@@ -14,7 +14,7 @@ namespace Skola_Bank_Server
         static List<Log> logs;
         static XmlLogManager()
         {
-            logManager = new XmlFileManager("logs.xml", "logs");
+            logManager = new XmlFileManager("logs.xml", "logs", "log");
             logs = ExtractAllLogs();
         }
 

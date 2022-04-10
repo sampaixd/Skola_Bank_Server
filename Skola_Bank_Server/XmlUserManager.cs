@@ -11,32 +11,35 @@ namespace Skola_Bank_Server
     internal class XmlUserManager
     {
         static XmlFileManager userManager;
-        List<User> users = new List<User>();
+        static List<User> users;
         static XmlUserManager()
         {
-            userManager = new XmlFileManager("users.xml", "users");
-            
+            userManager = new XmlFileManager("users.xml", "users", "user");   
+            users = ExtractAllUserInfo();
         }
+
         static public List<User> ExtractAllUserInfo()
         {
             List<User> users = new List<User>();
             XmlNodeList extractUserInfo = userManager.XmlDocument.SelectNodes("users/user");
-            foreach (XmlNode node in extractUserInfo)
+            foreach (XmlNode user in extractUserInfo)
             {
-                string accountType = node.SelectSingleNode("accountType").InnerText;
+                string accountType = user.SelectSingleNode("accountType").InnerText;
                 if (accountType == "admin")
-                    users.Add(ExtractAdminInfo(node));
+                    users.Add(ExtractAdminInfo(user));
                 else
-                    users.Add(ExtractConsumerInfo(node));
+                    users.Add(ExtractConsumerInfo(user));
             }
             return users;
         }
+
         static Admin ExtractAdminInfo(XmlNode admin)
         {
             string[] credentials = ExtractUserCredentials(admin);
             string password = admin.SelectSingleNode("password").InnerText;
             return new Admin(credentials[0], credentials[1], credentials[2], password);
         }
+
         // 0 is first name, 1 is last name and 2 is social security number
         static string[] ExtractUserCredentials(XmlNode user)
         {
@@ -70,6 +73,53 @@ namespace Skola_Bank_Server
             int depositId = Convert.ToInt32(deposit.SelectSingleNode("id").InnerText);
             double balance = Convert.ToDouble(deposit.SelectSingleNode("balance").InnerText);
             return new Deposit(depositName, depositId, balance);
+        }
+
+        static void AddConsumer(Consumer newConsumer)
+        {
+            XmlDocument xmlDocument = userManager.XmlDocument;
+            XmlElement userElement = userManager.CreateNewElement();
+            AddUserCredentials(newConsumer, userElement);
+
+            XmlElement deposits = xmlDocument.CreateElement("deposits");
+            userElement.AppendChild(deposits);
+            xmlDocument.Save(userManager.Path);
+        }
+
+        static void AddAdmin(Admin newAdmin)
+        {
+            XmlDocument xmlDocument = userManager.XmlDocument;
+            XmlElement userElement = userManager.CreateNewElement();
+            AddUserCredentials(newAdmin, userElement);
+
+            XmlElement password = xmlDocument.CreateElement("password");
+            password.InnerText = newAdmin.Password;
+            userElement.AppendChild(password);
+
+            xmlDocument.Save(userManager.Path);
+        }
+
+        static void AddUserCredentials(User newUser, XmlElement userElement)
+        {
+            XmlDocument xmlDocument = userManager.XmlDocument;
+            XmlElement firstName = xmlDocument.CreateElement("firstName");
+            firstName.InnerText = newUser.FirstName;
+            userElement.AppendChild(firstName);
+
+            XmlElement lastName = xmlDocument.CreateElement("lastName");
+            lastName.InnerText = newUser.LastName;
+            userElement.AppendChild(lastName);
+
+            XmlElement socialSecurityNumber = xmlDocument.CreateElement("socialSecurityNumber");
+            socialSecurityNumber.InnerText = newUser.SocialSecurityNumber;
+            userElement.AppendChild(socialSecurityNumber);
+        }
+
+        // TODO make it so you can find the correct user by searching for the matching social security number
+        static void AddDeposit(Deposit newDeposit, string socialSecurityNumber)
+        { 
+            XmlDocument xmlDocument = userManager.XmlDocument;
+            XmlElement deposit = xmlDocument.SelectSingleNode($"users/user")
         }
     }
 }

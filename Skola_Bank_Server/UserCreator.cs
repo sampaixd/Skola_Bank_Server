@@ -12,6 +12,7 @@ namespace Skola_Bank_Server
         static void CreateUser(Socket client)
         {
             string userCredentials = SocketComm.RecvMsg(client);
+            string[] decipheredCredentials = DecipherMessage(userCredentials);
         }
 
         static string[] DecipherMessage(string message)
@@ -21,8 +22,11 @@ namespace Skola_Bank_Server
             int[] separationCharLocation = FindAllSeparationChars(messageChars);
             // +1 is in place to prevent a | to appear at the start of the string, the -1 does the same but in the end instead
             string firstName = message.Substring(0, separationCharLocation[0]);
+            
             string lastName = message.Substring(separationCharLocation[0] + 1, separationCharLocation[1] - separationCharLocation[0] - 1);
+            
             string socialSecurityNumber = message.Substring(separationCharLocation[1] + 1, message.Length - separationCharLocation[1] - 1);
+
             return new string[] { firstName, lastName, socialSecurityNumber };
 
         }
