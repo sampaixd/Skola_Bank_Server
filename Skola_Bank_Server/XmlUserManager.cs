@@ -116,10 +116,19 @@ namespace Skola_Bank_Server
         }
 
         // TODO make it so you can find the correct user by searching for the matching social security number
-        static void AddDeposit(Deposit newDeposit, string socialSecurityNumber)
-        { 
-            XmlDocument xmlDocument = userManager.XmlDocument;
-            XmlElement deposit = xmlDocument.SelectSingleNode($"users/user")
+        static void AddDeposit(Deposit newDeposit, User currentUser)
+        {
+            try
+            {
+                XmlElement SelectedUser = userManager.FindElement("socialSecurityNumber", currentUser.SocialSecurityNumber);
+            }
+            catch(NonExistingElementException)
+            {
+                XmlLogManager.AddLog(currentUser, "Could not find user in database", "ErrorLog");
+                return;
+            }
+
+            
         }
     }
 }

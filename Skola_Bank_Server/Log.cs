@@ -9,27 +9,27 @@ namespace Skola_Bank_Server
     internal class Log
     {
         string time;
-        string user;
+        string socialSecurityNumber;
         string ip;
         string message;
-        public Log(string time, string user, string ip, string message)
+        public Log(string time, string socialSecurityNumber, string ip, string message)
         {
             this.time = time;
-            this.user = user;
+            this.socialSecurityNumber = socialSecurityNumber;
             this.ip = ip;
             this.message = message;
         }
         public Log(string time, string ip, string message)
         {
             this.time = time;
-            this.user = "none";
+            this.socialSecurityNumber = "none";
             this.ip = ip;
             this.message = message;
         }
 
         public void DisplayLog()
         {
-            Console.WriteLine($"{time} - ip: {ip} - user: {user}  - message: {message}");
+            Console.WriteLine($"{time} - ip: {ip} - user: {socialSecurityNumber}  - message: {message}");
         }
     }
 }

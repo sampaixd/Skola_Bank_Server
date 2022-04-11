@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Net.Sockets;
 
 namespace Skola_Bank_Server
 {
@@ -12,12 +13,21 @@ namespace Skola_Bank_Server
         protected string lastName;
         protected string socialSecurityNumber;
         protected bool suspended;
+        protected Socket? connection;
         public User(string firstName, string lastName, string socialSecurityNumber)
         {
             this.firstName = firstName;
             this.lastName = lastName;
             this.socialSecurityNumber = socialSecurityNumber;
             this.suspended = false;
+        }
+
+        public User(string firstName, string lastName, string socialSecurityNumber, bool suspended)
+        {
+            this.firstName = firstName;
+            this.lastName = lastName;
+            this.socialSecurityNumber = socialSecurityNumber;
+            this.suspended = suspended;
         }
         protected abstract void LoggedinMenu();
         protected abstract void ChangeUserInformation();
@@ -34,6 +44,8 @@ namespace Skola_Bank_Server
             get { return suspended; }
             set { suspended = value; }
         }
+
+        public string IP { get { return connection.RemoteEndPoint.ToString(); } }
 
     }
 }

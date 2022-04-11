@@ -12,10 +12,12 @@ namespace Skola_Bank_Server
     {
         string path;
         XmlDocument xmlDocument;
+        string documentElement;
         string parentNode;
         public XmlFileManager(string path, string documentElement, string parentNode)
         {
             this.path = path;
+            this.documentElement = documentElement;
             this.parentNode = parentNode;
             if (!File.Exists(path))
                 CreateXml();
@@ -26,8 +28,8 @@ namespace Skola_Bank_Server
         {
             XmlDeclaration xmldeclaration = xmlDocument.CreateXmlDeclaration("1.0", "utf-8", null);
             xmlDocument.AppendChild(xmldeclaration);
-            XmlElement documentElement = xmlDocument.CreateElement("users");
-            xmlDocument.AppendChild(documentElement);
+            XmlElement newDocumentElement = xmlDocument.CreateElement(documentElement);
+            xmlDocument.AppendChild(newDocumentElement);
             xmlDocument.Save(path);
         }
         // creates a new element and returns it, making it possible to do more with the added element in their respective classes
@@ -38,6 +40,18 @@ namespace Skola_Bank_Server
             XmlElement addedElement = xmlDocument.CreateElement(parentNode);
             documentElement.AppendChild(addedElement);
             return addedElement;
+        }
+        // finds and returns a parent node that has a certain child node (for example social security number)
+        public XmlElement FindElement(string childNode, string searchedResult)
+        {
+            XmlNodeList parentNodes = xmlDocument.SelectNodes(childNode);
+            foreach (XmlNode parentNode in parentNodes)
+            {
+                string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
+                if (currentChildNode == searchedResult)
+                    return (XmlElement)parentNode;
+            }
+            throw new NonExistingElementException();
         }
 
         public string Path { get { return path; } }
