@@ -33,7 +33,7 @@ namespace Skola_Bank_Server
             xmlDocument.Save(path);
         }
         // creates a new element and returns it, making it possible to do more with the added element in their respective classes
-        public XmlElement CreateNewElement()
+        public XmlElement CreateParentMode()
         {
             XmlElement documentElement = xmlDocument.DocumentElement;
 
@@ -42,7 +42,7 @@ namespace Skola_Bank_Server
             return addedElement;
         }
         // finds and returns a parent node that has a certain child node (for example social security number)
-        public XmlElement FindElement(string childNode, string searchedResult)
+        public XmlElement FindParentNode(string childNode, string searchedResult)
         {
             XmlNodeList parentNodes = xmlDocument.SelectNodes(childNode);
             foreach (XmlNode parentNode in parentNodes)
@@ -52,6 +52,17 @@ namespace Skola_Bank_Server
                     return (XmlElement)parentNode;
             }
             throw new NonExistingElementException();
+        }
+
+        static public string FindElementByValue(string childNode, string searchedResult)
+        {
+            XmlNodeList parentNodes = XmlDocument.SelectNodes(childNode);
+            foreach (XmlNode parentNode in parentNodes)
+            {
+                string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
+                if (currentChildNode == searchedResult)
+
+            }
         }
 
         public string Path { get { return path; } }

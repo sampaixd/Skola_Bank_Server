@@ -9,12 +9,12 @@ using System.Net.Sockets;
 
 namespace Skola_Bank_Server
 {
-    internal static class XmlLogManager
+    internal static class LogManager
     {
         static DateTime dateTime;
         static XmlFileManager logManager;
         static List<Log> logs;
-        static XmlLogManager()
+        static LogManager()
         {
             dateTime = new DateTime();
             logManager = new XmlFileManager("logs.xml", "logs", "log");
@@ -34,7 +34,7 @@ namespace Skola_Bank_Server
 
         static Log ExtractSingleLog(XmlNode log)
         {
-            string type = log.SelectSingleNode("type").InnerText;
+            logType type = (logType)Enum.Parse(typeof(logType), log.SelectSingleNode("type").InnerText);
             string time = log.SelectSingleNode("time").InnerText;
             string ip = log.SelectSingleNode("ip").InnerText;
             string user = log.SelectSingleNode("user").InnerText;
@@ -42,46 +42,70 @@ namespace Skola_Bank_Server
             return DefineLogType(new Log(time, ip, user, message), type);
         }
         // defines the log type and returns the results
-        static Log DefineLogType(Log newLog, string type)
+        static Log DefineLogType(Log newLog, logType type)
         {
             switch(type)
             {
-                case "ErrorLog":
+                case logType.ErrorLog:
                     return (ErrorLog)newLog;
-                case "LoginLog":
+                case logType.LoginLog:
                     return (LoginLog)newLog;
-                case "ModificationLog":
+                case logType.ModificationLog:
                     return (ModificationLog)newLog;
-                case "ConnectionLog":
+                case logType.ConnectionLog:
                     return (ConnectionLog)newLog;
+                case logType.TransactionLog:
+                    return (TransactionLog)newLog;
                 default:
                     throw new InvalidLogTypeException();
 
             }
         }
 
-        static public void AddLog(Socket user, string message, string type)
+        // used if the client is closed unexpectedly, and socket is no longer avalible
+        static public void AddLog(string ip, string message, logType type)
+        {
+            dateTime = DateTime.Now;
+            string time = dateTime.ToString("yyyy/MM/dd - HH:mm:ss");
+            logs.Add(DefineLogType(new Log(time, ip, message), type));
+        }
+        static public void AddLog(Socket user, string message, logType type)
         {
             dateTime = DateTime.Now;
             string time = dateTime.ToString("yyyy/MM/dd - HH:mm:ss");
             string ip = user.RemoteEndPoint.ToString();
-            logs.Add(DefineLogType(new Log(time, ip, message), type));
+            AttemptToAddLog(new Log(time, ip, message), type);
         }
 
         // with user instead of socket we can also log the current user by social security number
-        static public void AddLog(User user, string message, string type)
+        static public void AddLog(User user, string message, logType type)
         {
             dateTime = DateTime.Now;
             string time = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
             string ip = user.IP;
             string socialSecurityNumber = user.SocialSecurityNumber;
+            AttemptToAddLog(new Log(time, socialSecurityNumber, ip, message), type);
+        }
+        // for changes made by the server, no ip is neccesary
+        static public void AddLog(string message, logType type)
+        {
+            dateTime = DateTime.Now;
+            string time = dateTime.ToString("yyyy-MM-dd HH:mm:ss");
+            string ip = "local";
+            AttemptToAddLog(new Log(time, ip, message), type);
+
+        }
+
+        static void AttemptToAddLog(Log newLog, logType type)
+        {
             try
             {
-                logs.Add(DefineLogType(new Log(time, socialSecurityNumber, ip, message), type));
+                logs.Add(DefineLogType(newLog, type));
             }
             catch (InvalidLogTypeException)
             {
-
+                newLog.Message = $"Could not add log \"{newLog.Message}\"";
+                logs.Add(DefineLogType(newLog, logType.ErrorLog));
             }
         }
     }

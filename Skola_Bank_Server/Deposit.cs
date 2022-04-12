@@ -23,5 +23,9 @@ namespace Skola_Bank_Server
             this.id = id;
             this.balance = balance;
         }
+
+        public string Name { get { return name; } }
+        public int Id { get { return id; } }
+        public double Balance { get { return balance; } }
     }
 }

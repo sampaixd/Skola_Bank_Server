@@ -44,6 +44,8 @@ namespace Skola_Bank_Server
         static void HandleClient(Socket client)
         {
             bool connected = true;
+            // ip is saved in case a unexpected disconnect happens
+            string clientIp = client.RemoteEndPoint.ToString();
             while (connected)
             {
                 try
@@ -60,7 +62,7 @@ namespace Skola_Bank_Server
                             break;
 
                         case "quit":
-                            Console.WriteLine($"{client.RemoteEndPoint} disconnected");
+                            LogManager.AddLog(client, "Client disconnected", logType.ConnectionLog);
                             client.Close();
                             connected = false;
                             break;
@@ -69,13 +71,13 @@ namespace Skola_Bank_Server
                 }
                 catch (ClientDisconnectedException)
                 {
-                    Console.WriteLine("CLient connection closed unexpectedly");
+                    LogManager.AddLog(clientIp, "client disconnected unexpectedly", logType.ConnectionLog);
                     client.Close();
                     connected = false;
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine(e.Message);
+                    LogManager.AddLog(clientIp, $"{e.Message} stacktrace: {e.StackTrace}", logType.ErrorLog);
                     client.Close();
                     connected = false;
                 }

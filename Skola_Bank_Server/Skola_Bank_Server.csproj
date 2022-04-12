@@ -62,10 +62,9 @@
     <Compile Include="TransactionLog.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserCreator.cs" />
-    <Compile Include="UserManager.cs" />
     <Compile Include="XmlFileManager.cs" />
-    <Compile Include="XmlUserManager.cs" />
-    <Compile Include="XmlLogManager.cs" />
+    <Compile Include="UserManager.cs" />
+    <Compile Include="LogManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

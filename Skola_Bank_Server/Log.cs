@@ -6,6 +6,14 @@ using System.Threading.Tasks;
 
 namespace Skola_Bank_Server
 {
+    public enum logType
+    {
+        ConnectionLog,
+        ErrorLog,
+        LoginLog,
+        ModificationLog,
+        TransactionLog
+    }
     internal class Log
     {
         string time;
@@ -31,5 +39,7 @@ namespace Skola_Bank_Server
         {
             Console.WriteLine($"{time} - ip: {ip} - user: {socialSecurityNumber}  - message: {message}");
         }
+
+        public string Message { get { return message; } set { message = value; } }
     }
 }
