@@ -42,9 +42,9 @@ namespace Skola_Bank_Server
             return addedElement;
         }
         // finds and returns a parent node that has a certain child node (for example social security number)
-        public XmlElement FindParentNode(string childNode, string searchedResult)
+        public XmlElement FindParentNodeByChildNode(string childNode, string searchedResult)
         {
-            XmlNodeList parentNodes = xmlDocument.SelectNodes(childNode);
+            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{childNode}");
             foreach (XmlNode parentNode in parentNodes)
             {
                 string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
@@ -54,13 +54,14 @@ namespace Skola_Bank_Server
             throw new NonExistingElementException();
         }
 
-        static public string FindElementByValue(string childNode, string searchedResult)
+        public string FindElementByValue(string childNode, string searchedResult)
         {
-            XmlNodeList parentNodes = XmlDocument.SelectNodes(childNode);
+            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{childNode}");
             foreach (XmlNode parentNode in parentNodes)
             {
                 string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
                 if (currentChildNode == searchedResult)
+                    return 
 
             }
         }

@@ -47,5 +47,9 @@ namespace Skola_Bank_Server
 
         public string IP { get { return connection.RemoteEndPoint.ToString(); } }
 
+        public string[] GetCredentials()
+        {
+            return new string[] { firstName, lastName, socialSecurityNumber};
+        }
     }
 }

@@ -75,7 +75,7 @@ namespace Skola_Bank_Server
             return new Deposit(depositName, depositId, balance);
         }
 
-        static void AddConsumer(Consumer newConsumer)
+        static public void AddConsumer(Consumer newConsumer)
         {
             XmlDocument xmlDocument = xmlManager.XmlDocument;
             XmlElement userElement = xmlManager.CreateParentMode();
@@ -86,7 +86,7 @@ namespace Skola_Bank_Server
             xmlDocument.Save(xmlManager.Path);
         }
 
-        static void AddAdmin(Admin newAdmin)
+        static public void AddAdmin(Admin newAdmin)
         {
             XmlDocument xmlDocument = xmlManager.XmlDocument;
             XmlElement userElement = xmlManager.CreateParentMode();
@@ -117,12 +117,12 @@ namespace Skola_Bank_Server
         }
 
         // TODO make it so you can find the correct user by searching for the matching social security number
-        static void AddDeposit(Deposit newDeposit, User currentUser)
+        static public void AddDeposit(Deposit newDeposit, User currentUser)
         {
             XmlElement selectedUser = null; // assigns value to make it possible to compile
             try
             {
-                selectedUser = xmlManager.FindParentNode("socialSecurityNumber", currentUser.SocialSecurityNumber);
+                selectedUser = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", currentUser.SocialSecurityNumber);
             }
             catch(NonExistingElementException)
             {
@@ -158,7 +158,21 @@ namespace Skola_Bank_Server
 
         static public void FindSocialSecurityNumber(string searchedSocialSecurityNumber)
         {
-            xmlManager.FindParentNode("socialSecurityNumber", searchedSocialSecurityNumber);
+            foreach (User user in users)
+            {
+                if (user.SocialSecurityNumber == searchedSocialSecurityNumber)
+                    throw new SocialSecurityNumberTaken();
+            }
+        }
+
+        static public User GetUser(string[] searchedUserCredentials)
+        {
+            foreach (User user in users)
+            {
+                if (user.GetCredentials() == searchedUserCredentials)
+                    return user;
+            }
+            throw new NonExistingElementException();
         }
     }
 }

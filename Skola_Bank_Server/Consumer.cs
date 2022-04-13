@@ -13,5 +13,10 @@ namespace Skola_Bank_Server
         {
             this.deposits = deposits;
         }
+
+        public Consumer(string firstName, string lastName, string socialSecurityNumber) : base(firstName, lastName, socialSecurityNumber)
+        {
+            this.deposits = new List<Deposit>();
+        }
     }
 }

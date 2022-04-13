@@ -54,11 +54,11 @@ namespace Skola_Bank_Server
                     switch (msg)
                     {
                         case "create account":
-                            CreateUser(client);
+                            UserCreator.CreateUser(client);
                             break;
 
                         case "login":
-                            Login(client);
+                            LoginManager.Login(client);
                             break;
 
                         case "quit":

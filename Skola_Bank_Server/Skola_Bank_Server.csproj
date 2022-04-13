@@ -53,6 +53,7 @@
     <Compile Include="InvalidLogTypeException.cs" />
     <Compile Include="Log.cs" />
     <Compile Include="LoginLog.cs" />
+    <Compile Include="LoginManager.cs" />
     <Compile Include="ModificationLog.cs" />
     <Compile Include="NonExistingElementException.cs" />
     <Compile Include="Program.cs" />
