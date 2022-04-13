@@ -174,5 +174,37 @@ namespace Skola_Bank_Server
             }
             throw new NonExistingElementException();
         }
+
+        static public User GetUser(int userId)
+        {
+            return users[userId];
+        }
+
+        static public int GetUserId(string[] searchedUserCredentials)
+        {
+            int currentUserId = 0;
+            foreach (User user in users)
+            {
+                if (user.GetCredentials() == searchedUserCredentials)
+                    return currentUserId;
+                currentUserId++;
+            }
+            throw new NonExistingElementException();
+        }
+
+        static public string GetUserType(int userId)
+        {
+            if (users[userId] is Admin)
+                return "admin";
+            return "consumer";
+        }
+
+        static public bool IsCorrectPassword(int userId, string insertedPassword)
+        {
+            Admin tempUser = (Admin)users[userId];
+            if (tempUser.Password == insertedPassword)
+                return true;
+            return false;
+        }
     }
 }

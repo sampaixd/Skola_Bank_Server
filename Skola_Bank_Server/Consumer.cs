@@ -18,5 +18,21 @@ namespace Skola_Bank_Server
         {
             this.deposits = new List<Deposit>();
         }
+
+        public string FormatInfo()
+        {
+            string allDeposits = FormatDeposits();
+            return $"{firstName}|{lastName}|{socialSecurityNumber}|depositStart|{allDeposits}depositEnd";
+        }
+
+        string FormatDeposits()
+        {
+            string allDeposits = "";
+            foreach (Deposit deposit in deposits)
+            {
+                allDeposits += $"{deposit.Name}|{deposit.Id}|{deposit.Balance}|";
+            }
+            return allDeposits
+        }
     }
 }

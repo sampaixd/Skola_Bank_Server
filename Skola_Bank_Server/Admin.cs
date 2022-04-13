@@ -14,5 +14,10 @@ namespace Skola_Bank_Server
             this.password = password;
         }
         public string Password { get { return password; } }
+
+        public override string FormatInfo()
+        {
+            return $"{firstName}|{lastName}|{socialSecurityNumber}|{password}";
+        }
     }
 }

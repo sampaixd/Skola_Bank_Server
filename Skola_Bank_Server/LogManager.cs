@@ -56,6 +56,7 @@ namespace Skola_Bank_Server
                     return (ConnectionLog)newLog;
                 case logType.TransactionLog:
                     return (TransactionLog)newLog;
+                case logType.
                 default:
                     throw new InvalidLogTypeException();
 

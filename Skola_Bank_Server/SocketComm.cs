@@ -19,7 +19,26 @@ namespace Skola_Bank_Server
                 string msg = "";
                 for (int i = 0; i < msgSize; i++)
                     msg += Convert.ToChar(msgB[i]);
-                Console.WriteLine($"{client.RemoteEndPoint} says {msg}");
+                LogManager.AddLog(client.RemoteEndPoint.ToString(), $"message recieved: {msg}", logType.CommunicationLog);
+
+                return msg;
+            }
+            catch (Exception)
+            {
+                throw new ClientDisconnectedException();
+            }
+        }
+        // added in to make it possible to log the current user aswell
+        public static string RecvMsg(User client)
+        {
+            try
+            {
+                byte[] msgB = new byte[256];
+                int msgSize = client.Connection.Receive(msgB);
+                string msg = "";
+                for (int i = 0; i < msgSize; i++)
+                    msg += Convert.ToChar(msgB[i]);
+                LogManager.AddLog(client, $"message recieved: {msg}", logType.CommunicationLog);
 
                 return msg;
             }
@@ -33,7 +52,7 @@ namespace Skola_Bank_Server
         {
             try
             {
-                Console.WriteLine($"Sending message {msg} to {client.RemoteEndPoint}");
+                LogManager.AddLog(client.RemoteEndPoint.ToString(), $"sent message: {msg}", logType.CommunicationLog);
                 byte[] bSend = new byte[256];
                 bSend = Encoding.UTF8.GetBytes(msg);
                 client.Send(bSend);
@@ -44,38 +63,21 @@ namespace Skola_Bank_Server
                 throw new ClientDisconnectedException();
             }
         }
-        /*public static void SendOnlineStatus(Socket client, int ownId)
+        // added in to make it possible to log the current user aswell
+        public static void SendMsg(User client, string msg)
         {
-            List<string> allOnlineStatus = new List<string>();
-            allOnlineStatus = UserInfo.GetAllOnlineStatus();
-            int currentUserID = 0;
-            foreach (string onlineStatus in allOnlineStatus)
+            try
             {
-                if (currentUserID != ownId) // does not send the client information about themselves
-                    SendMsg(client, onlineStatus);
-                currentUserID++;
+                LogManager.AddLog(client, $"sent message: {msg}", logType.CommunicationLog);
+                byte[] bSend = new byte[256];
+                bSend = Encoding.UTF8.GetBytes(msg);
+                client.Connection.Send(bSend);
+                Thread.Sleep(50);   // avoids multiple messages being sent at once
             }
-            SendMsg(client, "end");
+            catch (Exception)
+            {
+                throw new ClientDisconnectedException();
+            }
         }
-
-        public static void SendChatLogs(Socket client, int roomId)
-        {
-            List<Message> chatLog = ChatRoomManager.GetChatLog(roomId);
-            foreach (Message message in chatLog)
-            {
-                SendMsg(client, message.ConvertInfoToString());
-            }
-            SendMsg(client, "end");
-        }
-
-        public static void SendAllChatRoomInfo(Socket client)
-        {
-            List<string> chatRoomInfo = ChatRoomManager.FormatChatRoomsToString();
-            foreach (string roomInfo in chatRoomInfo)
-            {
-                SendMsg(client, roomInfo);
-            }
-            SendMsg(client, "end");
-        }*/
     }
 }

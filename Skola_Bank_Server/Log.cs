@@ -8,6 +8,7 @@ namespace Skola_Bank_Server
 {
     public enum logType
     {
+        CommunicationLog,
         ConnectionLog,
         ErrorLog,
         LoginLog,

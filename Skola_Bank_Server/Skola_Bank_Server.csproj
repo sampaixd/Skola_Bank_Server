@@ -46,6 +46,7 @@
     <Compile Include="AccountHolder.cs" />
     <Compile Include="Admin.cs" />
     <Compile Include="ClientDisconnectedException.cs" />
+    <Compile Include="CommunicationLog.cs" />
     <Compile Include="ConnectionLog.cs" />
     <Compile Include="Consumer.cs" />
     <Compile Include="Deposit.cs" />

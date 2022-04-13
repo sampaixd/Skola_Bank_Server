@@ -13,13 +13,14 @@ namespace Skola_Bank_Server
         protected string lastName;
         protected string socialSecurityNumber;
         protected bool suspended;
-        protected Socket? connection;
+        protected Socket connection;
         public User(string firstName, string lastName, string socialSecurityNumber)
         {
             this.firstName = firstName;
             this.lastName = lastName;
             this.socialSecurityNumber = socialSecurityNumber;
             this.suspended = false;
+            this.connection = null;
         }
 
         public User(string firstName, string lastName, string socialSecurityNumber, bool suspended)
@@ -28,12 +29,14 @@ namespace Skola_Bank_Server
             this.lastName = lastName;
             this.socialSecurityNumber = socialSecurityNumber;
             this.suspended = suspended;
+            this.connection = null;
         }
         protected abstract void LoggedinMenu();
         protected abstract void ChangeUserInformation();
         protected abstract void ChangePassword();
         protected abstract void ChangeUsername();
         protected abstract void ChangeSocialSecurityNumber();
+        public abstract string FormatInfo();
 
         public string FirstName { get { return firstName; } }
         public string LastName { get { return lastName;} }
@@ -47,9 +50,12 @@ namespace Skola_Bank_Server
 
         public string IP { get { return connection.RemoteEndPoint.ToString(); } }
 
+
         public string[] GetCredentials()
         {
             return new string[] { firstName, lastName, socialSecurityNumber};
         }
+
+        public Socket Connection { get { return connection; } }
     }
 }
