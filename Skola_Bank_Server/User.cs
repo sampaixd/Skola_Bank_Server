@@ -33,9 +33,9 @@ namespace Skola_Bank_Server
         }
         protected abstract void LoggedinMenu();
         protected abstract void ChangeUserInformation();
-        protected abstract void ChangePassword();
         protected abstract void ChangeUsername();
-        protected abstract void ChangeSocialSecurityNumber();
+        protected abstract void ChangeFirstName();
+        protected abstract void ChangeLastName();
         public abstract string FormatInfo();
 
         public string FirstName { get { return firstName; } }

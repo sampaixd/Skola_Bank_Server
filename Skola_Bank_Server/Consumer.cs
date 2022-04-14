@@ -32,7 +32,7 @@ namespace Skola_Bank_Server
             {
                 allDeposits += $"{deposit.Name}|{deposit.Id}|{deposit.Balance}|";
             }
-            return allDeposits
+            return allDeposits;
         }
     }
 }

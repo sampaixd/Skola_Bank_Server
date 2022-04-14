@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using System.IO;
+using System.Net.Sockets;
 
 namespace Skola_Bank_Server
 {
@@ -206,5 +207,57 @@ namespace Skola_Bank_Server
                 return true;
             return false;
         }
+
+        static public void SendAllConsumerInfo(Socket client)
+        {
+            foreach(User user in users)
+            {
+                if (user is Consumer)
+                    SocketComm.SendMsg(client, user.FormatInfo());
+            }
+            SocketComm.SendMsg(client, "end");
+        }
+
+        // information 0-2 is the users credentials, information 3 is true or false where true is suspended
+        static public void ManageSuspension(string[] information, Admin responsibleAdmin)
+        {
+            User user = null;
+            try
+            {
+                user = GetUser(new string[] { information[0], information[1], information[2] });
+            }
+            catch (NonExistingElementException)
+            {
+                LogManager.AddLog(responsibleAdmin, $"could not find user with social security number {information[2]}", logType.ModificationLog);
+                SocketComm.SendMsg(responsibleAdmin, "error");
+                return;
+            }
+            ChangeSuspension(user, information[3]);
+        }
+        // if changes are made by server there is no responsible admin
+        static public void ManageSuspension(string[] information)
+        {
+            User user = null;
+            try
+            {
+                user = GetUser(new string[] { information[0], information[1], information[2] });
+            }
+            catch (NonExistingElementException)
+            {
+                LogManager.AddLog($"could not find user with social security number {information[2]}", logType.ModificationLog);
+                return;
+            }
+            ChangeSuspension(user, information[3]);
+        }
+
+        static void ChangeSuspension(User user, string state)
+        {
+            xmlManager.ChangeElement(user, "suspended", state);
+            if (state == "True")
+                user.Suspended = true;
+            else
+                user.Suspended = false;
+        }
+            
     }
 }

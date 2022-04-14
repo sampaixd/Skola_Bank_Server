@@ -44,7 +44,7 @@ namespace Skola_Bank_Server
         // finds and returns a parent node that has a certain child node (for example social security number)
         public XmlElement FindParentNodeByChildNode(string childNode, string searchedResult)
         {
-            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{childNode}");
+            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{parentNode}");
             foreach (XmlNode parentNode in parentNodes)
             {
                 string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
@@ -56,14 +56,21 @@ namespace Skola_Bank_Server
 
         public string FindElementByValue(string childNode, string searchedResult)
         {
-            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{childNode}");
+            XmlNodeList parentNodes = xmlDocument.SelectNodes($"{documentElement}/{parentNode}");
             foreach (XmlNode parentNode in parentNodes)
             {
                 string currentChildNode = parentNode.SelectSingleNode(childNode).InnerText;
                 if (currentChildNode == searchedResult)
-                    return 
-
+                    return currentChildNode;
             }
+            throw new NonExistingElementException();
+        }
+
+        public void ChangeElement(User selectedUser, string childNode, string newInnerText)
+        {
+            XmlElement parentNode = FindParentNodeByChildNode("socialSecurityNumber", selectedUser.SocialSecurityNumber);
+            XmlElement selectedChildNode = (XmlElement)parentNode.SelectSingleNode(childNode);
+            selectedChildNode.InnerText = newInnerText;
         }
 
         public string Path { get { return path; } }

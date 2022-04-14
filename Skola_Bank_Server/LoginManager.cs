@@ -31,6 +31,8 @@ namespace Skola_Bank_Server
             string userType = UserManager.GetUserType(userId);
             if (userType == "Admin")
                 AdminLogin(client, userId);
+            else
+                ConsumerLogin(client, userId);
 
 
         }
@@ -45,10 +47,15 @@ namespace Skola_Bank_Server
                 {
                     Admin activeUser = (Admin)UserManager.GetUser(userId);
                     SocketComm.SendMsg(client, activeUser.FormatInfo());
+                    activeUser.LoggedinMenu(client);
                 }
             }
         }
 
         static void ConsumerLogin(Socket client, int userId)
+        {
+            Consumer activeUser = (Consumer)UserManager.GetUser(userId);
+            activeUser.LoggedinMenu(client);
+        }
     }
 }
