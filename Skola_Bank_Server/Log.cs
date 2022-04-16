@@ -41,6 +41,11 @@ namespace Skola_Bank_Server
             Console.WriteLine($"{time} - ip: {ip} - user: {socialSecurityNumber}  - message: {message}");
         }
 
+        public virtual string FormatLog()
+        {
+            return $"{time}|{ip}|{socialSecurityNumber}|{message}";
+        }
+
         public string Message { get { return message; } set { message = value; } }
     }
 }

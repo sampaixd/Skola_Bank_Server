@@ -258,6 +258,21 @@ namespace Skola_Bank_Server
             else
                 user.Suspended = false;
         }
+
+        static public void ChangeFirstName(User user, string newFirstName)
+        {
+            xmlManager.ChangeElement(user, "firstName", newFirstName);
+        }
+
+        static public void ChangeLastName(User user, string newLastName)
+        {
+            xmlManager.ChangeElement(user, "lastName", newLastName);
+        }
+
+        static public void ChangePassword(Admin admin, string newPassword)
+        {
+            xmlManager.ChangeElement(admin, "password", newPassword);
+        }
             
     }
 }

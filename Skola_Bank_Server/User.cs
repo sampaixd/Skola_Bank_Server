@@ -31,11 +31,11 @@ namespace Skola_Bank_Server
             this.suspended = suspended;
             this.connection = null;
         }
-        protected abstract void LoggedinMenu();
+        public abstract void LoggedinMenu(Socket client);
         protected abstract void ChangeUserInformation();
         protected abstract void ChangeUsername();
-        protected abstract void ChangeFirstName();
-        protected abstract void ChangeLastName();
+        protected abstract void ChangeFirstName(string newFirstName);
+        protected abstract void ChangeLastName(string newLastName);
         public abstract string FormatInfo();
 
         public string FirstName { get { return firstName; } }

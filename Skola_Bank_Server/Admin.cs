@@ -16,7 +16,7 @@ namespace Skola_Bank_Server
         }
         public string Password { get { return password; } }
 
-        public void LoggedinMenu(Socket client)
+        public override void LoggedinMenu(Socket client)
         {
             connection = client;
             try
@@ -46,7 +46,7 @@ namespace Skola_Bank_Server
                     return;
             }
         }
-
+        // forwards the selected option to the method it represents
         void ForwardSelectedOption(string selectedOption)
         {
             switch(selectedOption)
@@ -60,23 +60,64 @@ namespace Skola_Bank_Server
                     break;
 
                 case "viewLogs":
-                    LogsMenu();
+                    SendLogs();
                     break;
             }
         }
 
         void SuspendMenu()
         {
-            UserManager.SendAllConsumerInfo(connection);
-            string selectedAction = SocketComm.RecvMsg(connection); // example action : selectedConsumer|true/false
-            if (selectedAction != "back")
+            bool inSuspendMenu = true;
+            while (inSuspendMenu)
             {
-                string[] splitAction = selectedAction.Split('|');
-                UserManager.ManageSuspension(splitAction);
+                UserManager.SendAllConsumerInfo(connection);
+                string selectedAction = SocketComm.RecvMsg(connection); // example action : selectedConsumer|True/False
+                if (selectedAction != "back")
+                {
+                    string[] splitAction = selectedAction.Split('|');
+                    UserManager.ManageSuspension(splitAction);
+                }
+                else
+                    return;
             }
         }
 
+        void SendLogs()
+        {
+            LogManager.SendLogs(connection);
+        }
 
+        protected override void ChangeUserInformation()
+        {
+            // example selectedChange: firstName|newFirstName
+            string selectedChange = SocketComm.RecvMsg(connection);
+            string[] splitSelectedChange = selectedChange.Split('|');
+            if (splitSelectedChange[0] == "firstName")
+                ChangeFirstName(splitSelectedChange[1]);
+
+            else if (splitSelectedChange[0] == "lastName")
+                ChangeLastName(splitSelectedChange[1]);
+            else
+                ChangePassword(splitSelectedChange[1]);
+        }
+
+        protected override void ChangeFirstName(string newFirstName)
+        {
+            firstName = newFirstName;
+            UserManager.ChangeFirstName(this, newFirstName);
+        }
+
+        protected override void ChangeLastName(string newLastName)
+        {
+            lastName = newLastName;
+            UserManager.ChangeLastName(this, newLastName);
+        }
+
+        void ChangePassword(string newPassword)
+        {
+            password = newPassword;
+            UserManager.ChangePassword(this, newPassword);
+        }
 
         public override string FormatInfo()
         {

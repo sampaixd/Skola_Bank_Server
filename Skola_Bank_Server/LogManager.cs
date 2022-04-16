@@ -48,15 +48,21 @@ namespace Skola_Bank_Server
             {
                 case logType.ErrorLog:
                     return (ErrorLog)newLog;
+                
                 case logType.LoginLog:
                     return (LoginLog)newLog;
+                
                 case logType.ModificationLog:
                     return (ModificationLog)newLog;
+                
                 case logType.ConnectionLog:
                     return (ConnectionLog)newLog;
+                
                 case logType.TransactionLog:
                     return (TransactionLog)newLog;
-                case logType.
+
+                case logType.CommunicationLog:
+                    return (CommunicationLog)newLog;
                 default:
                     throw new InvalidLogTypeException();
 
@@ -108,6 +114,18 @@ namespace Skola_Bank_Server
                 newLog.Message = $"Could not add log \"{newLog.Message}\"";
                 logs.Add(DefineLogType(newLog, logType.ErrorLog));
             }
+        }
+
+        //does not send error or communication logs
+        static public void SendLogs(Socket recievingAdmin)
+        {
+            foreach(Log log in logs)
+            {   // TODO reverse statement so it instead checks if its not one of the above, and then sends the data
+                if (log is CommunicationLog || log is ErrorLog)
+                    continue;
+                SocketComm.SendMsg(recievingAdmin, log.FormatLog());
+            }
+            SocketComm.SendMsg(recievingAdmin, "end");
         }
     }
 }

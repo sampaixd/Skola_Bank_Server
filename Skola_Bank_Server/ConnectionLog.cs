@@ -13,5 +13,10 @@ namespace Skola_Bank_Server
         { }
         public ConnectionLog(string time, string ip, string message) : base(time, ip, message)
         { }
+
+        public override string FormatLog()
+        {
+            return base.FormatLog() + "|ConnectionLog";
+        }
     }
 }
