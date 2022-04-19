@@ -92,15 +92,22 @@ namespace Skola_Bank_Server
             // example selectedChange: firstName|newFirstName
             string selectedChange = SocketComm.RecvMsg(connection);
             string[] splitSelectedChange = selectedChange.Split('|');
-            if (splitSelectedChange[0] == "firstName")
-                ChangeFirstName(splitSelectedChange[1]);
-
-            else if (splitSelectedChange[0] == "lastName")
-                ChangeLastName(splitSelectedChange[1]);
-            else
+            
+            if (selectedChange == "password")
                 ChangePassword(splitSelectedChange[1]);
+            else
+                ChangeUsername(splitSelectedChange);
         }
 
+
+        protected override void ChangeUsername(string[] SelectedNameAndNewName)
+        {
+            if (SelectedNameAndNewName[0] == "firstName")
+                ChangeFirstName(SelectedNameAndNewName[1]);
+
+            else if (SelectedNameAndNewName[0] == "lastName")
+                ChangeLastName(SelectedNameAndNewName[1]);
+        }
         protected override void ChangeFirstName(string newFirstName)
         {
             firstName = newFirstName;

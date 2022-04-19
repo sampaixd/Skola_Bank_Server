@@ -33,7 +33,7 @@ namespace Skola_Bank_Server
         }
         public abstract void LoggedinMenu(Socket client);
         protected abstract void ChangeUserInformation();
-        protected abstract void ChangeUsername();
+        protected abstract void ChangeUsername(string[] SelectedNameAndNewName);
         protected abstract void ChangeFirstName(string newFirstName);
         protected abstract void ChangeLastName(string newLastName);
         public abstract string FormatInfo();
