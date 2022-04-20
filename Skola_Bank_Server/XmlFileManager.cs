@@ -41,6 +41,11 @@ namespace Skola_Bank_Server
             documentElement.AppendChild(addedElement);
             return addedElement;
         }
+
+        public void Save()
+        {
+            xmlDocument.Save(path);
+        }
         // finds and returns a parent node that has a certain child node (for example social security number)
         public XmlElement FindParentNodeByChildNode(string childNode, string searchedResult)
         {

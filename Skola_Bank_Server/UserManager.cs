@@ -273,6 +273,55 @@ namespace Skola_Bank_Server
         {
             xmlManager.ChangeElement(admin, "password", newPassword);
         }
-            
+
+        // 0 is giving deposit, 1 is recieving deposit and 2 is ammount
+        static public void LocalTransaction(Consumer consumer, string[] depositsAndAmount)
+        {
+            XmlElement consumerNode = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", consumer.SocialSecurityNumber);
+            XmlNodeList depositNodes = consumerNode.SelectNodes("deposits");
+            XmlElement givingDeposit = null;
+            XmlElement recievingDeposit = null;
+            foreach (XmlNode deposit in depositNodes)
+            {
+                if (deposit.SelectSingleNode("id").InnerText == depositsAndAmount[0])
+                    givingDeposit = (XmlElement)deposit;
+                else if (deposit.SelectSingleNode("id").InnerText == depositsAndAmount[1])
+                    recievingDeposit = (XmlElement)deposit;
+            }
+
+            if (givingDeposit == null || recievingDeposit == null)
+                throw new NonExistingElementException();
+
+            PerformTransaction(givingDeposit, recievingDeposit, depositsAndAmount[2]);
+
+            string logMessage = $"{consumer.SocialSecurityNumber} transferred {depositsAndAmount[2]} from deposit {depositsAndAmount[0]} t0 {depositsAndAmount[1]}";
+            LogManager.AddLog(consumer, logMessage, logType.TransactionLog);
+
+        }
+        
+        // 0 is deposit id, 1 is amount (the recieving deposit is automatically the deposit with id 0
+        static void OnlineTransaction(Consumer givingConsumer, Consumer recievingConsumer, string[] depositAndAmount)
+        {
+            XmlElement givingConsumerNode = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", givingConsumer.SocialSecurityNumber);
+            XmlElement recievingConsumerNode = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", recievingConsumer.SocialSecurityNumber);
+
+
+            PerformTransaction()
+        }
+
+        static void PerformTransaction(XmlElement givingDeposit, XmlElement recievingDeposit, string amount)
+        {
+            double givingDepositAmount = Convert.ToDouble(givingDeposit.SelectSingleNode("balance").InnerText);
+            double recievingDepositAmount = Convert.ToDouble(recievingDeposit.SelectSingleNode("balance").InnerText);
+            double transactionAmount = Convert.ToDouble(amount);
+
+            givingDepositAmount -= transactionAmount;
+            recievingDepositAmount += transactionAmount;
+
+            givingDeposit.SelectSingleNode("balance").InnerText = Convert.ToString(givingDepositAmount);
+            recievingDeposit.SelectSingleNode("balance").InnerText = Convert.ToString(recievingDepositAmount);
+
+            xmlManager.Save();
+        }
     }
 }

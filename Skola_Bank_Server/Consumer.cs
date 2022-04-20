@@ -85,7 +85,11 @@ namespace Skola_Bank_Server
         // transaction within the current users deposits
         void LocalTransaction()
         {
-            throw new NotImplementedException();
+            string recievedDepositsAndAmmount = SocketComm.RecvMsg(connection);
+            string[] recievedDepositsAndAmmountArr = recievedDepositsAndAmmount.Split('|');
+            UserManager.LocalTransaction(this, recievedDepositsAndAmmountArr);
+
+
         }
         
         // transaction with another consumer
