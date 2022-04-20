@@ -306,7 +306,7 @@ namespace Skola_Bank_Server
             XmlElement recievingConsumerNode = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", recievingConsumer.SocialSecurityNumber);
 
 
-            PerformTransaction()
+            // PerformTransaction(); TODO come back later
         }
 
         static void PerformTransaction(XmlElement givingDeposit, XmlElement recievingDeposit, string amount)

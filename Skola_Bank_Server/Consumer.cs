@@ -60,11 +60,11 @@ namespace Skola_Bank_Server
                     break;
 
                 case "addDeposit":
-                    AddDeposit();
+                    //AddDeposit();
                     break;
 
                 case "editDeposit":
-                    EditDeposit();
+                    //EditDeposit();
                     break;
 
                 case "changeInfo":
@@ -97,7 +97,28 @@ namespace Skola_Bank_Server
         {
             throw new NotImplementedException();
         }
-        public string FormatInfo()
+
+        protected override void ChangeUserInformation()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ChangeUsername(string[] SelectedNameAndNewName)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ChangeFirstName(string newFirstName)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override void ChangeLastName(string newLastName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override string FormatInfo()
         {
             string allDeposits = FormatDeposits();
             return $"{firstName}|{lastName}|{socialSecurityNumber}|depositStart|{allDeposits}depositEnd";

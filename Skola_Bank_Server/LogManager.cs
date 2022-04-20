@@ -12,34 +12,40 @@ namespace Skola_Bank_Server
     internal static class LogManager
     {
         static DateTime dateTime;
-        static XmlFileManager logManager;
+        static XmlFileManager xmlManager;
         static List<Log> logs;
         static LogManager()
         {
             dateTime = new DateTime();
-            logManager = new XmlFileManager("logs.xml", "logs", "log");
+            xmlManager = new XmlFileManager("logs.xml", "logs", "log");
             logs = ExtractAllLogs();
         }
 
         static List<Log> ExtractAllLogs()
         {
             List<Log> logs = new List<Log>();
-            XmlNodeList extractLogs = logManager.XmlDocument.SelectNodes("logs/log");
+            XmlNodeList extractLogs = xmlManager.XmlDocument.SelectNodes("logs/log");
             foreach (XmlNode log in extractLogs)
             {
-                logs.Add(ExtractSingleLog(log));
+                logs.Add(ExtractSingleLog((XmlElement)log));
+                
             }
             return logs;
         }
 
-        static Log ExtractSingleLog(XmlNode log)
+        static Log ExtractSingleLog(XmlElement log)
         {
             logType type = (logType)Enum.Parse(typeof(logType), log.SelectSingleNode("type").InnerText);
             string time = log.SelectSingleNode("time").InnerText;
             string ip = log.SelectSingleNode("ip").InnerText;
-            string user = log.SelectSingleNode("user").InnerText;
+            string socialSecurityNumber = log.SelectSingleNode("socialSecurityNumber").InnerText;
             string message = log.SelectSingleNode("message").InnerText;
-            return DefineLogType(new Log(time, ip, user, message), type);
+
+            Console.WriteLine($"time: {time} ip: {ip} number: {socialSecurityNumber} message: {message}");
+            Log newLog = new Log(time, socialSecurityNumber, ip, message);
+            Console.WriteLine("test: " + newLog.Ip);
+            //return DefineLogType(new Log(time, socialSecurityNumber, ip, message), type);
+            return null;
         }
         // defines the log type and returns the results
         static Log DefineLogType(Log newLog, logType type)
@@ -47,22 +53,22 @@ namespace Skola_Bank_Server
             switch(type)
             {
                 case logType.ErrorLog:
-                    return (ErrorLog)newLog;
+                    return newLog as ErrorLog;
                 
                 case logType.LoginLog:
-                    return (LoginLog)newLog;
+                    return newLog as LoginLog;
                 
                 case logType.ModificationLog:
-                    return (ModificationLog)newLog;
+                    return newLog as ModificationLog;
                 
                 case logType.ConnectionLog:
-                    return (ConnectionLog)newLog;
+                    return newLog as ConnectionLog;
                 
                 case logType.TransactionLog:
-                    return (TransactionLog)newLog;
+                    return newLog as TransactionLog;
 
                 case logType.CommunicationLog:
-                    return (CommunicationLog)newLog;
+                    return newLog as CommunicationLog;
                 default:
                     throw new InvalidLogTypeException();
 
@@ -74,14 +80,13 @@ namespace Skola_Bank_Server
         {
             dateTime = DateTime.Now;
             string time = dateTime.ToString("yyyy/MM/dd - HH:mm:ss");
-            logs.Add(DefineLogType(new Log(time, ip, message), type));
+            AttemptToAddLog(new Log(time, ip, message), type);
         }
         static public void AddLog(Socket user, string message, logType type)
         {
             dateTime = DateTime.Now;
             string time = dateTime.ToString("yyyy/MM/dd - HH:mm:ss");
             string ip = user.RemoteEndPoint.ToString();
-            AttemptToAddLog(new Log(time, ip, message), type);
         }
 
         // with user instead of socket we can also log the current user by social security number
@@ -108,11 +113,36 @@ namespace Skola_Bank_Server
             try
             {
                 logs.Add(DefineLogType(newLog, type));
+                logs[0].DisplayLog();
+                XmlElement parentNode = xmlManager.CreateParentMode();
+                XmlDocument xmlDocument = xmlManager.XmlDocument;
+
+                XmlElement xmlType = xmlDocument.CreateElement("type");
+                xmlType.InnerText = type.ToString();
+                parentNode.AppendChild(xmlType);
+
+                XmlElement time = xmlDocument.CreateElement("time");
+                time.InnerText = newLog.Time;
+                parentNode.AppendChild(time);
+
+                XmlElement socialSecurityNumber = xmlDocument.CreateElement("socialSecurityNumber");
+                socialSecurityNumber.InnerText = newLog.SocialSecurityNumber;
+                parentNode.AppendChild(socialSecurityNumber);
+
+                XmlElement ip = xmlDocument.CreateElement("ip");
+                ip.InnerText = newLog.Ip;
+                parentNode.AppendChild(ip);
+
+                XmlElement message = xmlDocument.CreateElement("message");
+                message.InnerText = newLog.Message;
+                parentNode.AppendChild(message);
+
+                xmlDocument.Save(xmlManager.Path);
             }
             catch (InvalidLogTypeException)
             {
                 newLog.Message = $"Could not add log \"{newLog.Message}\"";
-                logs.Add(DefineLogType(newLog, logType.ErrorLog));
+                AttemptToAddLog(newLog, logType.ErrorLog);
             }
         }
 

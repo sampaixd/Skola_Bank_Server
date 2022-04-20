@@ -19,10 +19,10 @@ namespace Skola_Bank_Server
             this.path = path;
             this.documentElement = documentElement;
             this.parentNode = parentNode;
+            xmlDocument = new XmlDocument();
             if (!File.Exists(path))
                 CreateXml();
-            xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(path);
+            xmlDocument.Load(path);
         }
         void CreateXml()
         {
@@ -39,6 +39,8 @@ namespace Skola_Bank_Server
 
             XmlElement addedElement = xmlDocument.CreateElement(parentNode);
             documentElement.AppendChild(addedElement);
+
+            xmlDocument.Save(path);
             return addedElement;
         }
 

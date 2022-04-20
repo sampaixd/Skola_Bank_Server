@@ -29,10 +29,11 @@ namespace Skola_Bank_Server
                     Socket client = tcplistener.AcceptSocket();
                     Thread thread = new Thread(() => HandleClient(client));
                     Console.WriteLine($"{client.RemoteEndPoint} connected");
+                    LogManager.AddLog(client.RemoteEndPoint.ToString(), "connected", logType.ConnectionLog);
                     thread.Start();
                 }
 
-                catch (Exception e)
+                catch (NonExistingElementException e)
                 {
                     Console.WriteLine("An error occured! " + e.Message);
                 }

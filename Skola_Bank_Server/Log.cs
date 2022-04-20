@@ -46,6 +46,12 @@ namespace Skola_Bank_Server
             return $"{time}|{ip}|{socialSecurityNumber}|{message}";
         }
 
+        public string Time { get { return time; } }
+
+        public string SocialSecurityNumber { get { return socialSecurityNumber; } } 
+
+        public string Ip { get { return ip; } }
+
         public string Message { get { return message; } set { message = value; } }
     }
 }
