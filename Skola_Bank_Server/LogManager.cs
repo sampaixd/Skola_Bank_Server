@@ -28,7 +28,6 @@ namespace Skola_Bank_Server
             foreach (XmlNode log in extractLogs)
             {
                 logs.Add(ExtractSingleLog((XmlElement)log));
-                
             }
             return logs;
         }
@@ -41,34 +40,32 @@ namespace Skola_Bank_Server
             string socialSecurityNumber = log.SelectSingleNode("socialSecurityNumber").InnerText;
             string message = log.SelectSingleNode("message").InnerText;
 
-            Console.WriteLine($"time: {time} ip: {ip} number: {socialSecurityNumber} message: {message}");
-            Log newLog = new Log(time, socialSecurityNumber, ip, message);
-            Console.WriteLine("test: " + newLog.Ip);
-            //return DefineLogType(new Log(time, socialSecurityNumber, ip, message), type);
-            return null;
+            return DefineLogType(new Log(time, socialSecurityNumber, ip, message), type);
         }
         // defines the log type and returns the results
         static Log DefineLogType(Log newLog, logType type)
         {
+            // (DowncastLog) newLog nor newLog as DowncastLog worked, so this is the best option I could fix
             switch(type)
             {
                 case logType.ErrorLog:
-                    return newLog as ErrorLog;
+                    return new ErrorLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
                 
                 case logType.LoginLog:
-                    return newLog as LoginLog;
+                    return new LoginLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
                 
                 case logType.ModificationLog:
-                    return newLog as ModificationLog;
+                    return new ModificationLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
                 
                 case logType.ConnectionLog:
-                    return newLog as ConnectionLog;
+                    return new ConnectionLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
+                    
                 
                 case logType.TransactionLog:
-                    return newLog as TransactionLog;
+                    return new TransactionLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
 
                 case logType.CommunicationLog:
-                    return newLog as CommunicationLog;
+                    return new CommunicationLog(newLog.Time, newLog.Ip, newLog.SocialSecurityNumber, newLog.Message);
                 default:
                     throw new InvalidLogTypeException();
 
@@ -113,7 +110,6 @@ namespace Skola_Bank_Server
             try
             {
                 logs.Add(DefineLogType(newLog, type));
-                logs[0].DisplayLog();
                 XmlElement parentNode = xmlManager.CreateParentMode();
                 XmlDocument xmlDocument = xmlManager.XmlDocument;
 

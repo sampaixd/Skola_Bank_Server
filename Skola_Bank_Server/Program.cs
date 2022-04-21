@@ -76,12 +76,12 @@ namespace Skola_Bank_Server
                     client.Close();
                     connected = false;
                 }
-                catch (Exception e)
+                /*catch (Exception e)
                 {
                     LogManager.AddLog(clientIp, $"{e.Message} stacktrace: {e.StackTrace}", logType.ErrorLog);
                     client.Close();
                     connected = false;
-                }
+                }*/
             }
         }
 

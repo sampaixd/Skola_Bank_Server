@@ -78,9 +78,11 @@ namespace Skola_Bank_Server
 
         static public void AddConsumer(Consumer newConsumer)
         {
+
+            users.Add(newConsumer);
             XmlDocument xmlDocument = xmlManager.XmlDocument;
             XmlElement userElement = xmlManager.CreateParentMode();
-            AddUserCredentials(newConsumer, userElement);
+            AddUserCredentials(newConsumer, userElement, "consumer");
 
             XmlElement deposits = xmlDocument.CreateElement("deposits");
             userElement.AppendChild(deposits);
@@ -91,7 +93,7 @@ namespace Skola_Bank_Server
         {
             XmlDocument xmlDocument = xmlManager.XmlDocument;
             XmlElement userElement = xmlManager.CreateParentMode();
-            AddUserCredentials(newAdmin, userElement);
+            AddUserCredentials(newAdmin, userElement, "admin");
 
             XmlElement password = xmlDocument.CreateElement("password");
             password.InnerText = newAdmin.Password;
@@ -101,9 +103,14 @@ namespace Skola_Bank_Server
             LogManager.AddLog("Admin added", logType.ModificationLog);
         }
 
-        static void AddUserCredentials(User newUser, XmlElement userElement)
+        static void AddUserCredentials(User newUser, XmlElement userElement, string accountType)
         {
             XmlDocument xmlDocument = xmlManager.XmlDocument;
+
+            XmlElement xmlAccountType = xmlDocument.CreateElement("accountType");   
+            xmlAccountType.InnerText = accountType;
+            userElement.AppendChild(xmlAccountType);
+            
             XmlElement firstName = xmlDocument.CreateElement("firstName");
             firstName.InnerText = newUser.FirstName;
             userElement.AppendChild(firstName);

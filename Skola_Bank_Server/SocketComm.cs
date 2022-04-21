@@ -14,7 +14,7 @@ namespace Skola_Bank_Server
         {
             try
             {
-                byte[] msgB = new byte[256];
+                byte[] msgB = new byte[1024];
                 int msgSize = client.Receive(msgB);
                 string msg = "";
                 for (int i = 0; i < msgSize; i++)
@@ -33,7 +33,7 @@ namespace Skola_Bank_Server
         {
             try
             {
-                byte[] msgB = new byte[256];
+                byte[] msgB = new byte[1024];
                 int msgSize = client.Connection.Receive(msgB);
                 string msg = "";
                 for (int i = 0; i < msgSize; i++)
@@ -53,7 +53,7 @@ namespace Skola_Bank_Server
             try
             {
                 LogManager.AddLog(client.RemoteEndPoint.ToString(), $"sent message: {msg}", logType.CommunicationLog);
-                byte[] bSend = new byte[256];
+                byte[] bSend = new byte[1024];
                 bSend = Encoding.UTF8.GetBytes(msg);
                 client.Send(bSend);
                 Thread.Sleep(50);   // avoids multiple messages being sent at once
@@ -69,7 +69,7 @@ namespace Skola_Bank_Server
             try
             {
                 LogManager.AddLog(client, $"sent message: {msg}", logType.CommunicationLog);
-                byte[] bSend = new byte[256];
+                byte[] bSend = new byte[1024];
                 bSend = Encoding.UTF8.GetBytes(msg);
                 client.Connection.Send(bSend);
                 Thread.Sleep(50);   // avoids multiple messages being sent at once
