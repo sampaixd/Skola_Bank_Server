@@ -16,11 +16,14 @@ namespace Skola_Bank_Server
             while (findingUser)
             {
                 string credentials = SocketComm.RecvMsg(client);
+                if (credentials == "")
+                    return; 
                 string[] decipheredCredentials = credentials.Split('|');
                 try
                 {
                     userId = UserManager.GetUserId(decipheredCredentials);    // instead of finding the user over and over again, we get the id instead
                     findingUser = false;
+                    SocketComm.SendMsg(client, "True");
                 }
                 catch (NonExistingElementException)
                 {
@@ -39,6 +42,7 @@ namespace Skola_Bank_Server
 
         static void AdminLogin(Socket client, int userId)
         {
+            SocketComm.SendMsg(client, "True");
             int attempts = 0;
             while (attempts < 3)
             {
@@ -54,6 +58,7 @@ namespace Skola_Bank_Server
 
         static void ConsumerLogin(Socket client, int userId)
         {
+            SocketComm.SendMsg(client, "False");
             Consumer activeUser = (Consumer)UserManager.GetUser(userId);
             activeUser.LoggedinMenu(client);
         }

@@ -193,7 +193,7 @@ namespace Skola_Bank_Server
             int currentUserId = 0;
             foreach (User user in users)
             {
-                if (user.GetCredentials() == searchedUserCredentials)
+                if (user.GetCredentials().SequenceEqual(searchedUserCredentials))
                     return currentUserId;
                 currentUserId++;
             }
