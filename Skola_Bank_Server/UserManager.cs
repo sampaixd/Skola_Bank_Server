@@ -86,7 +86,28 @@ namespace Skola_Bank_Server
 
             XmlElement deposits = xmlDocument.CreateElement("deposits");
             userElement.AppendChild(deposits);
+
+            AddStartDeposit(xmlDocument, deposits);
+
             xmlDocument.Save(xmlManager.Path);
+        }
+
+        static void AddStartDeposit(XmlDocument xmlDocument, XmlElement deposits)
+        {
+            XmlElement deposit = xmlDocument.CreateElement("deposit");
+            deposits.AppendChild(deposit);
+
+            XmlElement depositName = xmlDocument.CreateElement("name");
+            depositName.InnerText = "deposit 0";
+            deposit.AppendChild(depositName);
+
+            XmlElement depositId = xmlDocument.CreateElement("id");
+            depositId.InnerText = "0";
+            deposit.AppendChild(depositId);
+
+            XmlElement depositBalance = xmlDocument.CreateElement("balance");
+            depositBalance.InnerText = "500";
+            deposit.AppendChild(depositBalance);
         }
 
         static public void AddAdmin(Admin newAdmin)

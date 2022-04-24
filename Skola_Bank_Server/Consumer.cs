@@ -60,7 +60,7 @@ namespace Skola_Bank_Server
                     break;
 
                 case "addDeposit":
-                    //AddDeposit();
+                    AddDeposit();
                     break;
 
                 case "editDeposit":
@@ -76,7 +76,7 @@ namespace Skola_Bank_Server
         void PerformTransaction()
         {
             string transactionTarget = SocketComm.RecvMsg(connection);
-            if (transactionTarget == "self")
+            if (transactionTarget == "local")
                 LocalTransaction();
             else
                 OnlineTransaction();
@@ -85,6 +85,7 @@ namespace Skola_Bank_Server
         // transaction within the current users deposits
         void LocalTransaction()
         {
+            // givingdepositId|recievingDepositId|transactionAmmount
             string recievedDepositsAndAmmount = SocketComm.RecvMsg(connection);
             string[] recievedDepositsAndAmmountArr = recievedDepositsAndAmmount.Split('|');
             UserManager.LocalTransaction(this, recievedDepositsAndAmmountArr);
@@ -96,6 +97,14 @@ namespace Skola_Bank_Server
         void OnlineTransaction()
         {
             throw new NotImplementedException();
+        }
+
+        void AddDeposit()
+        {
+            // depositName|depositId|depositBalance
+            string newDeposit = SocketComm.RecvMsg(connection);
+            string[] newDepositArr = newDeposit.Split('|');
+            UserManager.AddDeposit(new Deposit(newDepositArr[0], Convert.ToInt32(newDepositArr[1]), Convert.ToDouble(newDepositArr[2])), this);
         }
 
         protected override void ChangeUserInformation()
