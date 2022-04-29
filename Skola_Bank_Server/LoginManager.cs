@@ -34,14 +34,15 @@ namespace Skola_Bank_Server
             string userType = UserManager.GetUserType(userId);
             if (userType == "Admin")
                 AdminLogin(client, userId);
+
             else
                 ConsumerLogin(client, userId);
-
 
         }
 
         static void AdminLogin(Socket client, int userId)
         {
+            // the true is saying that the user is an admin
             SocketComm.SendMsg(client, "True");
             int attempts = 0;
             while (attempts < 3)
@@ -58,8 +59,10 @@ namespace Skola_Bank_Server
 
         static void ConsumerLogin(Socket client, int userId)
         {
+            // the false is saying that the user is not an admin
             SocketComm.SendMsg(client, "False");
             Consumer activeUser = (Consumer)UserManager.GetUser(userId);
+            SocketComm.SendMsg(client, activeUser.FormatInfo());
             activeUser.LoggedinMenu(client);
         }
     }

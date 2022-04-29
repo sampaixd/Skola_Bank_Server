@@ -61,7 +61,7 @@ namespace Skola_Bank_Server
         static List<Deposit> ExtractUserDeposit(XmlNode consumer)
         {
             List<Deposit> deposits = new List<Deposit>();
-            XmlNodeList depositsXml = consumer.SelectNodes("users/user/deposits");
+            XmlNodeList depositsXml = consumer.SelectNodes("deposits/deposit");
             foreach (XmlNode deposit in depositsXml)
                 deposits.Add(ExtractSingleDeposit(deposit));
 
@@ -306,7 +306,7 @@ namespace Skola_Bank_Server
         static public void LocalTransaction(Consumer consumer, string[] depositsAndAmount)
         {
             XmlElement consumerNode = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", consumer.SocialSecurityNumber);
-            XmlNodeList depositNodes = consumerNode.SelectNodes("deposits");
+            XmlNodeList depositNodes = consumerNode.SelectNodes("deposits/deposit");
             XmlElement givingDeposit = null;
             XmlElement recievingDeposit = null;
             foreach (XmlNode deposit in depositNodes)

@@ -63,8 +63,8 @@ namespace Skola_Bank_Server
                     AddDeposit();
                     break;
 
-                case "editDeposit":
-                    //EditDeposit();
+                case "deleteDeposit":
+                    //DeleteDeposit();
                     break;
 
                 case "changeInfo":
@@ -130,7 +130,7 @@ namespace Skola_Bank_Server
         public override string FormatInfo()
         {
             string allDeposits = FormatDeposits();
-            return $"{firstName}|{lastName}|{socialSecurityNumber}|depositStart|{allDeposits}depositEnd";
+            return $"{firstName}|{lastName}|{socialSecurityNumber}|{allDeposits}depositEnd";
         }
 
         string FormatDeposits()
