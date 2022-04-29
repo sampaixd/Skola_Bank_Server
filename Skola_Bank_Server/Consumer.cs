@@ -64,7 +64,7 @@ namespace Skola_Bank_Server
                     break;
 
                 case "deleteDeposit":
-                    //DeleteDeposit();
+                    DeleteDeposit();
                     break;
 
                 case "changeInfo":
@@ -105,6 +105,13 @@ namespace Skola_Bank_Server
             string newDeposit = SocketComm.RecvMsg(connection);
             string[] newDepositArr = newDeposit.Split('|');
             UserManager.AddDeposit(new Deposit(newDepositArr[0], Convert.ToInt32(newDepositArr[1]), Convert.ToDouble(newDepositArr[2])), this);
+        }
+
+        void DeleteDeposit()
+        {
+            string depositId = SocketComm.RecvMsg(connection);
+            deposits.RemoveAt(Convert.ToInt32(depositId));
+            UserManager.DeleteDeposit(depositId, this);
         }
 
         protected override void ChangeUserInformation()

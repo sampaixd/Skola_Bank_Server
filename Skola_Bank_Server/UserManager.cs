@@ -146,22 +146,48 @@ namespace Skola_Bank_Server
         }
 
         // TODO make it so you can find the correct user by searching for the matching social security number
-        static public void AddDeposit(Deposit newDeposit, User currentUser)
+        static public void AddDeposit(Deposit newDeposit, Consumer currentConsumer)
         {
             XmlElement selectedUser = null; // assigns value to make it possible to compile
             try
             {
-                selectedUser = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", currentUser.SocialSecurityNumber);
+                selectedUser = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", currentConsumer.SocialSecurityNumber);
             }
             catch(NonExistingElementException)
             {
-                LogManager.AddLog(currentUser, "Could not find user in database", logType.ErrorLog);
+                LogManager.AddLog(currentConsumer, "Could not find user in database", logType.ErrorLog);
                 return;
             }
             XmlElement depositParent = (XmlElement)selectedUser.SelectSingleNode("deposits");
             CreateDeposit(depositParent, newDeposit);
-            LogManager.AddLog(currentUser, $"added deposit {newDeposit.Name}", logType.ModificationLog);
+            LogManager.AddLog(currentConsumer, $"added deposit {newDeposit.Name}", logType.ModificationLog);
             
+        }
+
+        static public void DeleteDeposit(string depositId, Consumer currentConsumer)
+        {
+            XmlElement selectedUser = null;
+            try
+            {
+                selectedUser = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", currentConsumer.SocialSecurityNumber);
+            }
+            catch (NonExistingElementException)
+            {
+                LogManager.AddLog(currentConsumer, "Could not find user in database", logType.ErrorLog);
+                return;
+            }
+            XmlNodeList deposits = selectedUser.SelectNodes("deposits/deposit");
+            XmlNode depositsParentNode = selectedUser.SelectSingleNode("deposits");
+            foreach (XmlNode deposit in deposits)
+            {
+                if (deposit.SelectSingleNode("id").InnerText == depositId)
+                {
+                    depositsParentNode.RemoveChild(deposit);
+                    LogManager.AddLog(currentConsumer, $"removed deposit {depositId}", logType.ModificationLog);
+                    break;
+                }
+            }
+            xmlManager.Save();
         }
 
         static void CreateDeposit(XmlElement depositParent, Deposit newDeposit)
