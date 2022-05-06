@@ -348,7 +348,7 @@ namespace Skola_Bank_Server
 
             PerformTransaction(givingDeposit, recievingDeposit, depositsAndAmount[2]);
 
-            string logMessage = $"{consumer.SocialSecurityNumber} transferred {depositsAndAmount[2]} from deposit {depositsAndAmount[0]} t0 {depositsAndAmount[1]}";
+            string logMessage = $"transferred {depositsAndAmount[2]} from deposit {depositsAndAmount[0]} t0 {depositsAndAmount[1]}";
             LogManager.AddLog(consumer, logMessage, logType.TransactionLog);
 
         }

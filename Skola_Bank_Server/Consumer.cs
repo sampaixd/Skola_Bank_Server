@@ -67,7 +67,7 @@ namespace Skola_Bank_Server
                     DeleteDeposit();
                     break;
 
-                case "changeInfo":
+                case "changeInfo":  //scrapped idea
                     ChangeUserInformation();
                     break;
             }
