@@ -67,6 +67,10 @@ namespace Skola_Bank_Server
                     DeleteDeposit();
                     break;
 
+                case "deleteAccount":
+                    DeleteUser();
+                    break;
+
                 case "changeInfo":  //scrapped idea
                     ChangeUserInformation();
                     break;
@@ -76,7 +80,10 @@ namespace Skola_Bank_Server
         void PerformTransaction()
         {
             string transactionTarget = SocketComm.RecvMsg(connection);
-            if (transactionTarget == "local")
+
+            if (transactionTarget == "back")
+                return;
+            else if (transactionTarget == "local")
                 LocalTransaction();
             else
                 OnlineTransaction();
@@ -87,6 +94,9 @@ namespace Skola_Bank_Server
         {
             // givingdepositId|recievingDepositId|transactionAmmount
             string recievedDepositsAndAmmount = SocketComm.RecvMsg(connection);
+            if (recievedDepositsAndAmmount == "back")
+                return;
+
             string[] recievedDepositsAndAmmountArr = recievedDepositsAndAmmount.Split('|');
             UserManager.LocalTransaction(this, recievedDepositsAndAmmountArr);
 
@@ -103,6 +113,8 @@ namespace Skola_Bank_Server
         {
             // depositName|depositId|depositBalance
             string newDeposit = SocketComm.RecvMsg(connection);
+            if (newDeposit == "back")
+                return;
             string[] newDepositArr = newDeposit.Split('|');
             UserManager.AddDeposit(new Deposit(newDepositArr[0], Convert.ToInt32(newDepositArr[1]), Convert.ToDouble(newDepositArr[2])), this);
         }
@@ -110,8 +122,15 @@ namespace Skola_Bank_Server
         void DeleteDeposit()
         {
             string depositId = SocketComm.RecvMsg(connection);
+            if (depositId == "back")
+                return;
             deposits.RemoveAt(Convert.ToInt32(depositId));
             UserManager.DeleteDeposit(depositId, this);
+        }
+
+        void DeleteUser()
+        {
+            UserManager.DeleteUser(this);
         }
 
         protected override void ChangeUserInformation()

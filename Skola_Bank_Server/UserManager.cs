@@ -254,6 +254,16 @@ namespace Skola_Bank_Server
             return "consumer";
         }
 
+        static public void DeleteUser(User selectedUser)
+        {
+            XmlElement xmlUser = xmlManager.FindParentNodeByChildNode("socialSecurityNumber", selectedUser.SocialSecurityNumber);
+            xmlManager.XmlDocument.DocumentElement.RemoveChild(xmlUser);
+            xmlManager.Save();
+            users.Remove(selectedUser);
+            LogManager.AddLog(selectedUser, "deleted account", logType.ModificationLog);
+
+        }
+
         static public bool IsCorrectPassword(int userId, string insertedPassword)
         {
             Admin tempUser = (Admin)users[userId];
