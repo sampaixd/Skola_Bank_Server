@@ -1,0 +1,127 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Skola_Bank_Server.User">
+    <Position X="12.5" Y="9.5" Width="5.75" />
+    <TypeIdentifier>
+      <HashCode>AgAAQERACABAQAGAAAABAAAAIAAAAADAEAAACAgAAAg=</HashCode>
+      <FileName>User.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.Consumer">
+    <Position X="11.25" Y="15" Width="7.25" />
+    <TypeIdentifier>
+      <HashCode>AgAARAQAGAAAwAAEAAAAAAQAgAAgAAQAEAAAAAgIAAA=</HashCode>
+      <FileName>Consumer.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="deposits" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Skola_Bank_Server.Deposit">
+    <Position X="2" Y="4.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAgAAAQIAAAEAAAAAAAAAAAAAgA=</HashCode>
+      <FileName>Deposit.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.UserCreator">
+    <Position X="13.5" Y="3.25" Width="4.75" />
+    <Compartments>
+      <Compartment Name="Methods" Collapsed="true" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAQBAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>UserCreator.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.UserManager">
+    <Position X="6.5" Y="0.75" Width="5.5" />
+    <TypeIdentifier>
+      <HashCode>ogAAYAgAMAACwIIGAAAAAAQAAAChAAAgECgAAAgIQIQ=</HashCode>
+      <FileName>UserManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="users" />
+      <Field Name="xmlManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Skola_Bank_Server.XmlFileManager">
+    <Position X="12.5" Y="5.25" Width="5.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIADAAgAAAIAAAACAAARAAEAAAAAAAAgAAgAAAE=</HashCode>
+      <FileName>XmlFileManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.LoginManager">
+    <Position X="14.75" Y="1.25" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAIAAAAABAAAAAAAAAAAAAAAAAQAAAAAAA=</HashCode>
+      <FileName>LoginManager.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.LogManager">
+    <Position X="6.25" Y="8" Width="4.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAEIAAgAABAAQAhAAAAAgAAAAEAAAAAAA=</HashCode>
+      <FileName>LogManager.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="logs" />
+      <Field Name="xmlManager" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Skola_Bank_Server.Log">
+    <Position X="1" Y="8" Width="4.75" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAIAAAAAACAAAAAAAAAAAAABACAAAAgIAAAISA=</HashCode>
+      <FileName>Log.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="System.Collections.Generic.List&lt;T&gt;">
+    <Position X="18.5" Y="3.25" Width="4.75" />
+    <NestedTypes>
+      <Struct Name="System.Collections.Generic.List&lt;T&gt;.Enumerator" Collapsed="true">
+        <TypeIdentifier />
+        <Lollipop Position="0.2" />
+      </Struct>
+    </NestedTypes>
+    <TypeIdentifier />
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Skola_Bank_Server.TransactionLog">
+    <Position X="0.5" Y="16.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>TransactionLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.ErrorLog">
+    <Position X="0.5" Y="14.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ErrorLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.ConnectionLog">
+    <Position X="0.5" Y="12.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ConnectionLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.CommunicationLog">
+    <Position X="0.5" Y="18.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>CommunicationLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Skola_Bank_Server.LoginLog">
+    <Position X="0.5" Y="20.5" Width="5.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAA=</HashCode>
+      <FileName>LoginLog.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

@@ -13,6 +13,7 @@ namespace Skola_Bank_Server
     {
         static XmlFileManager xmlManager;
         static List<User> users;
+
         static UserManager()
         {
             xmlManager = new XmlFileManager("users.xml", "users", "user");   

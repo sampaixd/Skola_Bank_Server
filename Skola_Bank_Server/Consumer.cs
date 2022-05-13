@@ -117,6 +117,7 @@ namespace Skola_Bank_Server
                 return;
             string[] newDepositArr = newDeposit.Split('|');
             UserManager.AddDeposit(new Deposit(newDepositArr[0], Convert.ToInt32(newDepositArr[1]), Convert.ToDouble(newDepositArr[2])), this);
+            deposits.Add(new Deposit(newDepositArr[0], Convert.ToInt32(newDepositArr[1]), Convert.ToDouble(newDepositArr[2])));
         }
 
         void DeleteDeposit()
